@@ -133,7 +133,30 @@ public class SunshineView extends View {
                 invalidate();
             }
         });
-        mAnimatorSet.play(innerRingAnimator).after(outRingAnimator).before(outRingAnimator1);
+        outRingAnimator1.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mOutArcStartAngle = -90 ;
+                mInnerArcStartAngle  = -90;
+            }
+        });
+        final ValueAnimator outRingAnimator2 = ValueAnimator.ofInt(0,180);
+        outRingAnimator2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int value = (int) animation.getAnimatedValue();
+
+                mInnerArcSweepAngle = value;
+
+                mOutArcSweepAngle = 180-value ;
+
+                mInnerArcSweepAngle = value - 180;
+
+                invalidate();
+            }
+        });
+        mAnimatorSet.playSequentially(outRingAnimator,innerRingAnimator,outRingAnimator1,outRingAnimator2);
+       // mAnimatorSet.play(innerRingAnimator).after(outRingAnimator).before(outRingAnimator1).after(outRingAnimator2);
         mAnimatorSet.start();
     }
 private  boolean isSecond = false;
