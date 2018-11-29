@@ -156,9 +156,11 @@ private  boolean isSecond = false;
         mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(mOutRingColor);
-        canvas.drawCircle(0,0,mOutRingWidth,mPaint);//外圆大圆
+        //外圆大圆
+        canvas.drawCircle(0,0,mOutRingWidth,mPaint);
         mPaint.setColor(mInnerRingColor);
-        canvas.drawCircle(0,0,mInnerRingWidth,mPaint);//内圆小圆
+        //内圆小圆
+        canvas.drawCircle(0,0,mInnerRingWidth,mPaint);
     }
 
     /**
@@ -176,6 +178,8 @@ private  boolean isSecond = false;
     }
 
     public void reLoad(){
+        mInnerRingWidth = dp2px(mContext,2);
+        mOutRingWidth = dp2px(mContext,4);
         mOutArcStartAngle = 270;
         mOutArcSweepAngle = -90;
         mInnerArcStartAngle = -92;
