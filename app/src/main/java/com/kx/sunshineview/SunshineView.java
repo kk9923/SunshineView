@@ -118,17 +118,27 @@ public class SunshineView extends View {
             }
         });
         mAnimatorSet = new AnimatorSet().setDuration(ZOOM_RING_DURATION_TIME);
-        ValueAnimator outRingAnimator1 = ValueAnimator.ofInt(0,180);
+        ValueAnimator outRingAnimator1 = ValueAnimator.ofInt(0,360);
         outRingAnimator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 int value = (int) animation.getAnimatedValue();
-                mInnerArcSweepAngle = value;
+                //  前 180 度    外圆弧逆时针扩大至半圆弧(初始圆弧角度90度)，内圆弧顺时针扩大至半圆弧(初始圆弧角度2度)
+                if (value<180){
+                    mInnerArcSweepAngle = value;
 
-                mOutArcSweepAngle = -90 - value / 2 ;
+                    mOutArcSweepAngle = -90 - value / 2 ;
 
-                mInnerArcStartAngle = -90 + value;
-                mOutArcStartAngle = 270 - value  ;
+                    mInnerArcStartAngle = -90 + value;
+                    mOutArcStartAngle = 270 - value  ;
+                }else {
+                    mOutArcStartAngle = -90 ;
+                    mInnerArcStartAngle  = -90;
+                    value = value-180;
+                    mInnerArcSweepAngle = value;
+                    mOutArcSweepAngle = 180-value ;
+                    mInnerArcSweepAngle = value - 180;
+                }
 
                 invalidate();
             }
@@ -155,7 +165,7 @@ public class SunshineView extends View {
                 invalidate();
             }
         });
-        mAnimatorSet.playSequentially(outRingAnimator,innerRingAnimator,outRingAnimator1,outRingAnimator2);
+        mAnimatorSet.playSequentially(outRingAnimator,innerRingAnimator,outRingAnimator1);
        // mAnimatorSet.play(innerRingAnimator).after(outRingAnimator).before(outRingAnimator1).after(outRingAnimator2);
         mAnimatorSet.start();
     }
